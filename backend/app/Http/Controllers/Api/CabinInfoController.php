@@ -31,10 +31,8 @@ class CabinInfoController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-            'cabin_no' => 'required|max:10|unique:cabin_infos,cabin_no',
+            'cabin_no' => 'required|numeric|min:1|max:12|unique:cabin_infos,cabin_no',
             'cabin_name' => 'required|max:10|unique:cabin_infos,cabin_name',
-
-
             // 'cabin_description'
         ]);
 
@@ -42,6 +40,7 @@ class CabinInfoController extends Controller
             'cabin_no' => $request->cabin_no,
             'cabin_name' => $request->cabin_name,
             'cabin_description' => $request->cabin_description,
+            'created_at' => Carbon::now(),
         ]);
 
 
@@ -51,38 +50,28 @@ class CabinInfoController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $data = CabinInfo::where('cabin_no',$id)->first();
+        return response()->json($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $validateData = $request->validate([
+            'cabin_no' => 'required|numeric|min:1|max:12|unique:cabin_infos,cabin_no,'.$id.',cabin_no',
+            'cabin_name' => 'required|unique:cabin_infos,cabin_name,'.$id.',cabin_no',
+
+
+            // 'cabin_description'
+        ]);
+
+        CabinInfo::where('cabin_no',$id)->update([
+            'cabin_no' => $request->cabin_no,
+            'cabin_name' => $request->cabin_name,
+            'cabin_description' => $request->cabin_description,
+            'updated_at' => Carbon::now(),
+        ]);
     }
 
     /**

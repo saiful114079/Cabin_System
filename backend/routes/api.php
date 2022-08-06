@@ -18,5 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/* ================ Patient ================ */
+Route::get('patient-some-list','Api\PatientController@getPatientSomeData');
+Route::get('doctor-some-list','Api\DoctorController@getSomeDoctorList');
+
 Route::apiResource('cabin','Api\CabinInfoController');
 Route::apiResource('cabin-booking','Api\CabinBookingController');
+

@@ -12,7 +12,18 @@ class CabinBookingController extends Controller
 
     public function index()
     {
-        $data = CabinBooking::with('cabin')->orderBy('booking_id','DESC')->get();
+        $data = CabinBooking::leftjoin('patient_lists','cabin_bookings.petient_id','=','patient_lists.id')
+                            ->leftjoin('cabin_infos','cabin_bookings.cabin_no','=','cabin_infos.cabin_no')
+                            ->leftjoin('doctor_lists','cabin_bookings.surgeon_id','=','doctor_lists.id')
+                            ->select(
+                                'patient_lists.patient_id',
+                                'patient_lists.patient_name',
+                                'cabin_bookings.*',
+                                'cabin_infos.cabin_name',
+                                'cabin_infos.cabin_no',
+                                'doctor_lists.dr_name'
+                            )
+                            ->get();
         return response()->json([ 'data' => $data ]);
     }
 
@@ -38,14 +49,16 @@ class CabinBookingController extends Controller
             'cabin_no' => 'required',
             'booking_date' => 'required',
             'shift_type' => 'required',
+            'petient_id' => 'required',
+            'surgeon_id' => 'required',
         ]);
 
         CabinBooking::insert([
             'booking_date' => $request->booking_date,
             'cabin_no' => $request->cabin_no,
             'shift_type' => $request->shift_type,
-            'surgeon_id' => 1,
-            'petient_id' => 1,
+            'surgeon_id' => $request->surgeon_id,
+            'petient_id' => $request->petient_id,
             'operation_id' => 1,
             'user_id' => 1,
             'created_at' => Carbon::now(),
@@ -66,27 +79,27 @@ class CabinBookingController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $validateData = $request->validate([
+            'cabin_no' => 'required',
+            'booking_date' => 'required',
+            'shift_type' => 'required',
+            'petient_id' => 'required',
+            'surgeon_id' => 'required',
+        ]);
+
+        CabinBooking::where('booking_id',$id)->update([
+            'booking_date' => $request->booking_date,
+            'cabin_no' => $request->cabin_no,
+            'shift_type' => $request->shift_type,
+            'surgeon_id' => $request->surgeon_id,
+            'petient_id' => $request->petient_id,
+            'operation_id' => 1,
+            'user_id' => 1,
+            'created_at' => Carbon::now(),
+        ]);
     }
 
     /**

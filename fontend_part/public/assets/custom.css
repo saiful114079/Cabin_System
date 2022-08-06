@@ -1,0 +1,9 @@
+.custom__card{
+
+}
+
+.custom__card .card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
