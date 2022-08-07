@@ -7,3 +7,15 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.v-input{
+	margin-top: 0!important;
+}
+
+.v-text-field__details{
+    margin-top: 0!important;
+}
+
+.req_star{
+    color: red;
+}

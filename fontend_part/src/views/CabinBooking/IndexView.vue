@@ -13,32 +13,33 @@
                         <!-- main work -->
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-7 m-auto">
-                                    <table class="table table-bordered">
+                                <div class="col-md-10 m-auto">
+                                    <!-- <table class="table table-bordered">
                                         <thead>
-                                            <tr>
-                                            <th>Cabin No</th>
-                                            <th>Date</th>
-                                            <th>Shift</th>
-                                            <th>Surgeon</th>
-                                            <th>Patient</th>
-                                            <th>Action</th>
-                                            </tr>
+                                            
                                         </thead>
                                         <tbody>
                                             <tr v-for="item in cabinbookinglist" :key="item.booking_id">
-                                                <td>{{ item.cabin_name }}</td>
-                                                <td>{{ item.booking_date }}</td>
-                                                <td>{{ item.shift_type == 'm' ? 'Morning' : 'Evening' }}</td>
-                                                <td>{{ item.dr_name }}</td>
-                                                <td>{{ item.patient_name }}</td>
+                                                <td>{{  }}</td>
+                                                <td>{{ item. }}</td>
+                                                <td></td>
+                                                <td>{{ item. }}</td>
+                                                <td>{{ item. }}</td>
                                                 <td>
                                                     <router-link :to="{ name: 'cabin-booking-edit', params:{id:item.booking_id} }" class="btn btn-primary shadow btn-xs sharp mr-1" style="color:#fff"> Edit
                                                     </router-link>
                                                 </td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </table> -->
+
+                                    <!-- vuetify data table -->
+                                    <v-data-table :headers="headers" :items="cabinbookinglist" :items-per-page="5" class="elevation-1">
+
+                                    
+                                    
+                                    </v-data-table>
+                                    <!-- vuetify data table -->
                                 </div>
                             </div>
                         </div>
@@ -60,7 +61,36 @@ export default {
 
     data(){
       return{
-        cabinbookinglist:[]
+
+        headers: [
+          {
+            text: 'Cabin Name',
+            value: 'cabin_name',
+          },
+          {
+            text: 'Date',
+            value: 'booking_date',
+          },
+          {
+            text: 'Shift',
+            value: 'shift_type == "e" ? "Evening" : "Morning" ',
+          },
+          {
+            text: 'Surgeon',
+            value: 'dr_name',
+          },
+          {
+            text: 'Patient',
+            value: 'patient_name',
+          },
+          {
+            text: 'Action',
+            value: '',
+          },
+
+        ],
+        cabinbookinglist:[],
+        
       }
     },
 
