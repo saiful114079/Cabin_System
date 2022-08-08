@@ -17,11 +17,11 @@ class CreateCabinBookingsTable extends Migration
             $table->id('booking_id');
             $table->date('booking_date');
             $table->integer('cabin_no');
-            $table->enum('shift_type',['m','e'])->default('m');
+            $table->enum('shift_type',['Morning','Evening'])->default('Morning');
             $table->integer('surgeon_id');
             $table->integer('petient_id');
             $table->integer('operation_id');
-            $table->string('booking_staus',20)->nullable();
+            $table->enum('booking_staus',['avaiable','booking'])->default('avaiable');
             $table->integer('user_id');
             $table->timestamps();
         });

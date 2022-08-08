@@ -18,90 +18,31 @@
                   <!-- main part -->
 
                   <div class="col-md-4">
-                    <!-- <div class="mb-3">
-                    <label class="form-label">Select Cabin</label>-->
-
-                    <!-- <option v-for="(value, index) in course" v-bind:value="value.id" v-bind:selected="index === 0">
-                                                        {{ value.course_name }}
-                    </option>-->
-
-                    <!-- <select class="form-control" v-model="form.cabin_no">
-
-                                                <option v-for="(cabin) in cabinlist" :key="cabin.cabin_no" :value="cabin.cabin_no">{{ cabin.cabin_name }}</option>
-                                            </select>
-
-
-                                            <small class="text-danger" v-if="errors.cabin_no">{{errors.cabin_no[0]}}</small>
-                    </div>-->
 
                     <div class="mb-3">
                       <label class="form-label">Date</label>
 
-                      <v-text-field v-model="form.booking_date" :rules="nameRules" required
-                      type="date"></v-text-field>
+                      <!-- <v-text-field v-model="form.booking_date" :rules="nameRules" required
+                      type="date"></v-text-field> -->
 
-                      <!-- <input type="date" class="form-control" v-model="form.booking_date"> -->
 
-                      <small
-                        class="text-danger"
-                        v-if="errors.booking_date"
-                      >{{errors.booking_date[0]}}</small>
+                      <v-date-picker v-model="form.booking_date" :min="new Date().toISOString().substr(0, 10)"></v-date-picker>
+
+                      <small class="text-danger" v-if="errors.booking_date">{{errors.booking_date[0]}}</small>
                     </div>
-
-                    <!-- <div class="mb-3">
-                                            <label class="form-label">Cabin Shift</label>
-
-                                            <select class="form-control" v-model="form.shift_type">
-                                                <option value="m">Morning</option>
-                                                <option value="e">Evening</option>
-                                        </select>
-
-                                            <small class="text-danger" v-if="errors.shift_type">{{errors.shift_type[0]}}</small>
-                    </div>-->
 
                     <div class="mb-3">
                       <label class="form-label">Doctor</label>
-
-                      <!-- <select class="form-control" v-model="form.surgeon_id">
-
-                                                <option v-for="(doctor) in doctorList" :key="doctor.id" :value="doctor.id">{{ doctor.dr_name }}({{ doctor.dr_id }})</option>
-
-                      </select>-->
-
-                      <v-autocomplete
-                        v-model="form.surgeon_id"
-                        item-value="id"
-                        item-text="dr_name"
-                        :items="doctorList"
-                        dense
-                        filled
-                        label="Select Doctor"
-                      ></v-autocomplete>
-
+                      <v-autocomplete v-model="form.surgeon_id" item-value="id" item-text="dr_name" :items="doctorList" dense filled label="Select Doctor"></v-autocomplete>
                       <small class="text-danger" v-if="errors.surgeon_id">{{errors.surgeon_id[0]}}</small>
                     </div>
 
                     <div class="mb-3">
                       <label class="form-label">Patient</label>
-
-                      <!-- <select class="form-control" v-model="form.petient_id">
-
-                                                <option v-for="(patient) in patientList" :key="patient.id" :value="patient.id">{{ patient.patient_name }}({{ patient.patient_id }})</option>
-                      </select>-->
-
-                      <v-autocomplete
-                        v-model="form.petient_id"
-                        item-value="id"
-                        item-text="patient_name"
-                        :items="patientList"
-                        dense
-                        filled
-                        label="Select Patient"
-                      ></v-autocomplete>
-
+                      <v-autocomplete v-model="form.petient_id" item-value="id" item-text="patient_name"
+                      :items="patientList" dense filled label="Select Patient"></v-autocomplete>
                       <small class="text-danger" v-if="errors.petient_id">{{errors.petient_id[0]}}</small>
                     </div>
-
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
                   <!-- main part -->
@@ -110,13 +51,22 @@
                   <div class="col-md-8">
                     <table class="table table-bordered">
                       <tbody>
-                        <tr v-for="(cabin) in cabinlist" :key="cabin.cabin_no">
-                          <td>{{ cabin.cabin_no }}. ({{ cabin.cabin_name }})</td>
+                        <tr v-for="(cabin, index) in cabinlist" :key="index">
+                          <td>{{ index+1 }}. ({{ cabin.cabin_name }})</td>
+
+                          <!-- <input type="text" v-model="form.cabin_number" > -->
                           <td>
-                            <v-radio-group v-model="row" row>
-                              <v-radio label="Morning" value="Morning"></v-radio>
-                              <v-radio label="Evening" value="Evening"></v-radio>
-                            </v-radio-group>
+                            <!-- input button -->
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" v-model="form.cabin.cabin_name" id="Morning" :value="Morning">
+                              <label class="form-check-label" for="Morning">Morning</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" v-model="form.cabin.cabin_name" id="Evening" :value="Evening">
+                              <label class="form-check-label" for="Evening">Evening</label>
+                            </div>
+                            <!-- input button -->
                           </td>
                         </tr>
                       </tbody>
@@ -146,7 +96,9 @@ export default {
         booking_date: null,
         shift_type: null,
         petient_id: null,
-        surgeon_id: null
+        surgeon_id: null,
+        cabin_number: null,
+        cabin: []
       },
       errors: {},
       cabinlist: [],
