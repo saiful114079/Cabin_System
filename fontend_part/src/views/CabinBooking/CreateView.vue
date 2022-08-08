@@ -63,6 +63,19 @@
                       ></v-autocomplete>
                       <small class="text-danger" v-if="errors.petient_id">{{errors.petient_id[0]}}</small>
                     </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Cabin Number</label>
+                      <v-text-field v-model="form.cabin_no" required
+                      type="text"></v-text-field>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Cabin Shift</label>
+                      <v-text-field v-model="form.shift_type" required
+                      type="text"></v-text-field>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
                   <!-- main part -->
@@ -85,11 +98,11 @@
                           <td>
                             <!-- input button -->
                             <v-radio-group >
-                              <v-radio
+                              <v-radio v-on:click="cabinInfo('Morning',index+1)"
                                 label="Morning"
                                 value="Morning"
                               ></v-radio>
-                              <v-radio
+                              <v-radio v-on:click="cabinInfo('Evening',index+1)"
                                 label="Evening"
                                 value="Evening"
                               ></v-radio>
@@ -127,7 +140,7 @@ export default {
       form: {
         cabin_no: null,
         booking_date: null,
-        // shift_type: null,
+        shift_type: null,
         petient_id: null,
         surgeon_id: null,
       },
@@ -160,6 +173,12 @@ export default {
 
   // method
   methods: {
+    cabinInfo(shift,cabin){
+      this.form.cabin_no = cabin;
+      this.form.shift_type = shift;
+    },
+
+
     bookingDate() {
       axios
         .post("http://127.0.0.1:8000/api/cabin-booking-filter/date", this.form.booking_date)
