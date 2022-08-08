@@ -22,7 +22,7 @@
                                         item-key="name"
                                         class="elevation-1"
                                     ></v-data-table>
-                                    </template>
+                                </template>
                                 </div>
                             </div>
                         </div>
