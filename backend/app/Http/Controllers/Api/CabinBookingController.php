@@ -9,6 +9,16 @@ use Carbon\Carbon;
 
 class CabinBookingController extends Controller
 {
+    /* ============ Cabin Booking Status ============== */
+    public function cabinBookingStatus(Request $request){
+        if($request->booking_date != NULL){
+            return response()->json('date ache');
+        }else{
+            return response()->json('date nai');
+        }
+
+    }
+    /* ============ Cabin Booking Status ============== */
 
     public function index()
     {

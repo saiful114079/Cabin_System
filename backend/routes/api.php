@@ -23,5 +23,6 @@ Route::get('patient-some-list','Api\PatientController@getPatientSomeData');
 Route::get('doctor-some-list','Api\DoctorController@getSomeDoctorList');
 
 Route::apiResource('cabin','Api\CabinInfoController');
+Route::post('cabin-booking-filter/date','Api\CabinBookingController@cabinBookingStatus');
 Route::apiResource('cabin-booking','Api\CabinBookingController');
 
