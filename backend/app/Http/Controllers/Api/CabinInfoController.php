@@ -10,9 +10,13 @@ use Carbon\Carbon;
 class CabinInfoController extends Controller
 {
 
+    public function cabinListWithBooking(){
+
+    }
+
     public function index()
     {
-        $data = CabinInfo::get();
+        $data = CabinInfo::with('booking')->get();
         return response()->json( ['data' => $data] );
     }
 
