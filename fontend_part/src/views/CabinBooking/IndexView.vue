@@ -64,25 +64,35 @@ export default {
 
         headers: [
           {
-            text: 'Cabin Name',
-            value: 'cabin_name',
-          },
-          {
             text: 'Date',
             value: 'booking_date',
           },
           {
-            text: 'Shift',
-            value: 'shift_type == "e" ? "Evening" : "Morning" ',
+            text: 'Cabin Name',
+            value: 'cabin_name',
+            
           },
           {
-            text: 'Surgeon',
-            value: 'dr_name',
+            text: 'Shift',
+            value: 'shift_type',
+          },
+          
+          {
+            text: 'Status',
+            value: 'booking_staus',
+            
           },
           {
             text: 'Patient',
             value: 'patient_name',
           },
+          
+          
+          {
+            text: 'Surgeon',
+            value: 'dr_name',
+          },
+          
           {
             text: 'Action',
             value: '',
