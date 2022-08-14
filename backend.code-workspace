@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "fontend_part"
+		},
+		{
+			"path": "..\\Diqcare_main_software\\diqcare-application\\vision"
 		}
 	],
 	"settings": {}

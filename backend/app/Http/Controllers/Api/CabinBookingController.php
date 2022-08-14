@@ -9,18 +9,7 @@ use Carbon\Carbon;
 
 class CabinBookingController extends Controller
 {
-    /* ============ Cabin Booking Status ============== */
-    public function cabinBookingStatus(Request $request)
-    {
-        if ($request->booking_date != NULL) {
-            $data = CabinBooking::where('booking_date',$request->booking_date)->get();
-            return response()->json($data);
-        } else {
-            $current_date = Carbon::now()->format('Y-m-d');
-            $data = CabinBooking::where('booking_date',$current_date)->get();
-            return response()->json($data);
-        }
-    }
+
 
 
 
