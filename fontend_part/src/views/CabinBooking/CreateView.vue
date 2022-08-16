@@ -24,11 +24,7 @@
                       <!-- <v-text-field v-model="form.booking_date" :rules="nameRules" required
                       type="date"></v-text-field>-->
 
-                      <v-date-picker
-                        v-model="form.booking_date"
-                       
-                        v-on:change="bookingDate()"
-                      ></v-date-picker>
+                      <v-date-picker v-model="form.booking_date" v-on:change="bookingDate()"></v-date-picker>
 
                       <small
                         class="text-danger"
@@ -70,16 +66,14 @@
 
                     <div class="mb-3">
                       <label class="form-label">Cabin Name</label>
-                      <input type="hidden" v-model="form.cabin_no">
-                      <v-text-field v-model="form.cabin_name"
-                      type="text"></v-text-field>
+                      <input type="hidden" v-model="form.cabin_no" />
+                      <v-text-field v-model="form.cabin_name" type="text"></v-text-field>
                       <small class="text-danger" v-if="errors.cabin_name">{{errors.cabin_name[0]}}</small>
                     </div>
 
                     <div class="mb-3">
                       <label class="form-label">Cabin Shift</label>
-                      <v-text-field v-model="form.shift_type"
-                      type="text"></v-text-field>
+                      <v-text-field v-model="form.shift_type" type="text"></v-text-field>
                       <small class="text-danger" v-if="errors.shift_type">{{errors.shift_type[0]}}</small>
                     </div>
 
@@ -101,39 +95,62 @@
                         <tr v-for="(cabin, index) in cabinlist" :key="index">
                           <td>{{ index+1 }}. ({{ cabin.cabin_name }})</td>
 
+                          <!-- <td>#</td> -->
+                          <!-- <td>#</td> -->
+
                           <!-- <input type="text" v-model="form.cabin_number" > -->
                           <td>
-                            <!-- input button -->
-                            <v-radio-group >
-                              <v-radio v-on:click="cabinInfo('Morning',index+1,cabin.cabin_name)"
+                            <v-radio-group>
+                              <v-radio
+                                v-on:click="cabinInfo('Morning',index+1,cabin.cabin_name)"
                                 label="Morning"
-                                value="Morning" disabled=""
+                                value="Morning"
+                                :disabled="cabin.booking.length && (cabin.booking[0].shift_type=='Morning' || cabin.booking.length == 2 && cabin.booking[1].shift_type=='Morning')?true:false"
                               ></v-radio>
-                              <v-radio v-on:click="cabinInfo('Evening',index+1,cabin.cabin_name)"
+                              <v-radio
+                                v-on:click="cabinInfo('Evening',index+1,cabin.cabin_name)"
                                 label="Evening"
                                 value="Evening"
+                                :disabled="cabin.booking.length && (cabin.booking[0].shift_type=='Evening' || cabin.booking.length == 2 && cabin.booking[1].shift_type=='Evening')?true:false"
                               ></v-radio>
                             </v-radio-group>
-                            <!-- input button -->
                           </td>
 
                           <td>
-                              
+                            <span v-if="cabin.booking.length && cabin.booking[0] == 'Morning'">
+                              Morning Shift:
+                              <br />
+                              {{ cabin.booking[0].patient.patient_name }}
+                              <br />
+                              {{ cabin.booking[0].patient.patient_phone }}
+                              <br />
+                              {{ cabin.booking[0].patient.patient_address }}
+                            </span>
+                            <span v-if="cabin.booking.length && cabin.booking[1] == 'Morning' ">
+                              Evening Shift:
+                              {{ cabin.booking[0].patient.patient_name }}
+                              <br />
+                              {{ cabin.booking[0].patient.patient_phone }}
+                              <br />
+                              {{ cabin.booking[0].patient.patient_address }}
+                            </span>
                           </td>
+
 
                         </tr>
                       </tbody>
                     </table>
 
-
-
                     <div>
-                    
-                        <li v-for="(cabin, index) in dateWiseCabin" :key="index">{{ cabin.cabin_name }}</li>
+                      <ul>
+                        <li
+                          v-for="(cabind, index) in dateWiseCabin"
+                          :key="index"
+                        >{{ cabind.cabin_name }}</li>
+                      </ul>
                     </div>
                   </div>
                   <!-- cabin part -->
-
 
                   <!-- cabin part -->
                 </div>
@@ -153,62 +170,81 @@ export default {
   // Data Bingding
   data() {
     return {
+      isBook: null,
       form: {
         cabin_no: null,
         cabin_name: null,
-        booking_date: null,
+        booking_date: new Date().toISOString().substr(0, 10),
         shift_type: null,
         petient_id: null,
-        surgeon_id: null,
+        surgeon_id: null
       },
       errors: {},
       cabinlist: [],
       patientList: [],
       doctorList: [],
-      cabinbooking: [],
-      dateWiseCabin:[],
+      dateWiseCabin: []
     };
   },
   async mounted() {
-    let result = await axios.get("http://127.0.0.1:8000/api/cabin");
     let patientList = await axios.get(
       "http://127.0.0.1:8000/api/patient-some-list"
     );
     let doctorList = await axios.get(
       "http://127.0.0.1:8000/api/doctor-some-list"
     );
+
     let cabinbooking = await axios.get(
       "http://127.0.0.1:8000/api/cabin-booking"
     );
     this.cabinbooking = cabinbooking.data.data;
+
     this.cabinlist = result.data.data;
+
     this.patientList = patientList.data;
     this.doctorList = doctorList.data;
+
+    // this.bookingDate();
   },
   // method
   methods: {
-    cabinInfo(shift,cabin_no,cabin_name){
+    bookingDate(){
+      let result = axios.get("http://127.0.0.1:8000/api/available-cabin");
+
+      // let result =  axios.get("http://127.0.0.1:8000/api/available-cabin/?booking_date="+this.form.booking_date);
+
+      this.cabinlist = result.data.data;
+    },
+
+    cabinInfo(shift, cabin_no, cabin_name) {
       this.form.cabin_no = cabin_no;
       this.form.cabin_name = cabin_name;
       this.form.shift_type = shift;
     },
     /* ==== Doctor Listing ==== */
-    doctorListing(){
+    doctorListing() {
       console.log(this.form.surgeon_id);
     }, 
     /* ==== Doctor Listing ==== */ 
+
+
     bookingDate() {
       
+
         let result = axios.post("http://127.0.0.1:8000/api/cabin-booking-filter/date", this.form)
         this.dateWiseCabin = result.data
+
+
+
     },
+
     storeCabinBooking() {
       axios
         .post("http://127.0.0.1:8000/api/cabin-booking", this.form)
         .then(() => {
           this.$refs.storeCabinBookingReset.reset();
           console.log("Successfully Added New Cabin Booking");
-          this.$router.push({ name: 'cabin-book-list' })
+          this.$router.push({ name: "cabin-book-list" });
           // // alert =========
           // Toast.fire({
           //     icon: 'success',
